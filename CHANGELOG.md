@@ -1,3 +1,7 @@
+## [1.0.0-null-safety.0]
+
+* Migrate to null safety
+
 ## [0.3.1]
 
 * Fixed analyzer warnings.

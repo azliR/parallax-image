@@ -1,54 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Parallax Image Demo',
-      theme: new ThemeData(primarySwatch: Colors.blueGrey),
-      home: new MyHomePage(title: 'Parallax Image Demo'),
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: MyHomePage(title: 'Parallax Image Demo'),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return new Scaffold(
-      appBar: new AppBar(title: new Text(title)),
-      body: new Column(
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Column(
         children: <Widget>[
-          new Container(
+          Container(
             padding: const EdgeInsets.all(20.0),
-            child: new Text(
+            child: Text(
               'Horizontal scroll parallax',
-              style: theme.textTheme.title,
+              style: theme.textTheme.subtitle1,
             ),
           ),
-          new Container(
+          Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             constraints: const BoxConstraints(maxHeight: 200.0),
-            child: new ListView.builder(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: _buildHorizontalChild,
             ),
           ),
-          new Container(
+          Container(
             padding: const EdgeInsets.all(20.0),
-            child: new Text(
+            child: Text(
               'Vertical scroll parallax',
-              style: theme.textTheme.title,
+              style: theme.textTheme.subtitle1,
             ),
           ),
-          new Expanded(
-            child: new ListView.builder(
+          Expanded(
+            child: ListView.builder(
               itemBuilder: _buildVerticalChild,
             ),
           )
@@ -59,16 +59,16 @@ class MyHomePage extends StatelessWidget {
 
   Widget _buildVerticalChild(BuildContext context, int index) {
     index++;
-    if (index > 7) return null;
-    return new Padding(
+    if (index > 7) return const SizedBox();
+    return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: new GestureDetector(
+      child: GestureDetector(
         onTap: () {
           print('Tapped $index');
         },
-        child: new ParallaxImage(
+        child: ParallaxImage(
           extent: 150.0,
-          image: new ExactAssetImage(
+          image: ExactAssetImage(
             'images/img$index.jpg',
           ),
         ),
@@ -78,12 +78,12 @@ class MyHomePage extends StatelessWidget {
 
   Widget _buildHorizontalChild(BuildContext context, int index) {
     index++;
-    if (index > 7) return null;
-    return new Padding(
+    if (index > 7) return const SizedBox();
+    return Padding(
       padding: const EdgeInsets.only(right: 10.0),
-      child: new ParallaxImage(
+      child: ParallaxImage(
         extent: 100.0,
-        image: new ExactAssetImage(
+        image: ExactAssetImage(
           'images/img$index.jpg',
         ),
       ),

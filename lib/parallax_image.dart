@@ -32,9 +32,9 @@ class ParallaxImage extends StatelessWidget {
   /// attached to only one [Scrollable]. Otherwise created widget looks for
   /// nearest [Scrollable] ancestor and subscribes to scrolling updates on it.
   ParallaxImage({
-    Key key,
-    @required this.image,
-    @required this.extent,
+    Key? key,
+    required this.image,
+    required this.extent,
     this.controller,
     this.color,
     this.child,
@@ -48,7 +48,7 @@ class ParallaxImage extends StatelessWidget {
   ///
   /// If `null` then this widget uses nearest [Scrollable] ancestor to determine
   /// scroll direction and listen for scroll position changes.
-  final ScrollController controller;
+  final ScrollController? controller;
 
   /// Extent of this widget in scroll direction.
   ///
@@ -57,17 +57,17 @@ class ParallaxImage extends StatelessWidget {
   final double extent;
 
   /// Optional color to paint behind the [image].
-  final Color color;
+  final Color? color;
 
   /// The optional child of this widget.
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final scrollPosition = (controller != null)
-        ? controller.position
-        : Scrollable.of(context).position;
+        ? controller!.position
+        : Scrollable.of(context)!.position;
     final constraints = (scrollPosition.axis == Axis.vertical)
         ? new BoxConstraints(minHeight: extent)
         : new BoxConstraints(minWidth: extent);
@@ -96,21 +96,22 @@ class ParallaxImage extends StatelessWidget {
 
 class _Parallax extends SingleChildRenderObjectWidget {
   _Parallax({
-    Key key,
-    @required this.image,
-    @required this.scrollPosition,
-    @required this.screenSize,
+    Key? key,
+    required this.image,
+    required this.scrollPosition,
+    required this.screenSize,
     this.color,
-    Widget child,
+    Widget? child,
   }) : super(key: key, child: child);
+
   final ImageProvider image;
   final ScrollPosition scrollPosition;
   final Size screenSize;
-  final Color color;
+  final Color? color;
 
   @override
   _RenderParallax createRenderObject(BuildContext context) {
-    return new _RenderParallax(
+    return _RenderParallax(
       scrollPosition: scrollPosition,
       image: image,
       screenSize: screenSize,
@@ -130,12 +131,12 @@ class _Parallax extends SingleChildRenderObjectWidget {
 
 class _RenderParallax extends RenderProxyBox {
   _RenderParallax({
-    @required ScrollPosition scrollPosition,
-    @required ImageProvider image,
-    @required Size screenSize,
-    Color color,
+    required ScrollPosition scrollPosition,
+    required ImageProvider image,
+    required Size screenSize,
+    Color? color,
     ImageConfiguration configuration: ImageConfiguration.empty,
-    RenderBox child,
+    RenderBox? child,
   })  : _image = image,
         _scrollPosition = scrollPosition,
         _screenSize = screenSize,
@@ -146,10 +147,10 @@ class _RenderParallax extends RenderProxyBox {
   ImageProvider _image;
   ScrollPosition _scrollPosition;
   Size _screenSize;
-  Color _color;
+  Color? _color;
   ImageConfiguration _configuration;
-  Offset _position;
-  BoxPainter _painter;
+  late Offset _position;
+  BoxPainter? _painter;
 
   set image(ImageProvider value) {
     if (value == _image) return;
@@ -174,7 +175,7 @@ class _RenderParallax extends RenderProxyBox {
     markNeedsPaint();
   }
 
-  set color(Color value) {
+  set color(Color? value) {
     if (value == _color) return;
     _color = value;
     _painter?.dispose();
@@ -186,7 +187,7 @@ class _RenderParallax extends RenderProxyBox {
   ImageConfiguration get configuration => _configuration;
 
   Decoration get decoration {
-    if (_decoration != null) return _decoration;
+    if (_decoration != null) return _decoration!;
 
     /// Algorithm here uses only devices screen size and current
     /// global position of this image.
@@ -224,10 +225,10 @@ class _RenderParallax extends RenderProxyBox {
         fit: fit,
       ),
     );
-    return _decoration;
+    return _decoration!;
   }
 
-  Decoration _decoration;
+  Decoration? _decoration;
 
   BoxFit get fit {
     return (_scrollPosition.axis == Axis.vertical)
@@ -255,8 +256,6 @@ class _RenderParallax extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    assert(size.width != null);
-    assert(size.height != null);
     // We use center of the widget's render box as a reference point.
     var pos = localToGlobal(new Offset(size.width / 2, size.height / 2));
     if (_position != pos) {
@@ -268,12 +267,12 @@ class _RenderParallax extends RenderProxyBox {
     _painter ??= decoration.createBoxPainter(markNeedsPaint);
     final ImageConfiguration filledConfiguration =
         configuration.copyWith(size: size);
-    int debugSaveCount;
+    int? debugSaveCount;
     assert(() {
       debugSaveCount = context.canvas.getSaveCount();
       return true;
     }());
-    _painter.paint(context.canvas, offset, filledConfiguration);
+    _painter!.paint(context.canvas, offset, filledConfiguration);
     assert(() {
       if (debugSaveCount != context.canvas.getSaveCount()) {
         throw new FlutterError(
@@ -299,7 +298,7 @@ class _RenderParallax extends RenderProxyBox {
     description.add(new DiagnosticsProperty<ScrollPosition>(
         'scrollPosition', _scrollPosition));
     description.add(new DiagnosticsProperty<Size>('screenSize', _screenSize));
-    description.add(_decoration.toDiagnosticsNode(name: 'decoration'));
+    description.add(_decoration!.toDiagnosticsNode(name: 'decoration'));
     description.add(new DiagnosticsProperty<ImageConfiguration>(
         'configuration', configuration));
   }
