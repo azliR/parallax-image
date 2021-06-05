@@ -149,7 +149,7 @@ class _RenderParallax extends RenderProxyBox {
   Size _screenSize;
   Color? _color;
   ImageConfiguration _configuration;
-  late Offset _position;
+  Offset? _position;
   BoxPainter? _painter;
 
   set image(ImageProvider value) {
@@ -210,10 +210,11 @@ class _RenderParallax extends RenderProxyBox {
     // TODO: Might be a good idea to provide a way to customize this logic.
     Alignment alignment;
     if (_scrollPosition.axis == Axis.vertical) {
-      double value = (_position.dy / _screenSize.height - 0.5).clamp(-1.0, 1.0);
+      double value =
+          (_position!.dy / _screenSize.height - 0.5).clamp(-1.0, 1.0);
       alignment = new Alignment(0.0, value);
     } else {
-      double value = (_position.dx / _screenSize.width - 0.5).clamp(-1.0, 1.0);
+      double value = (_position!.dx / _screenSize.width - 0.5).clamp(-1.0, 1.0);
       alignment = new Alignment(value, 0.0);
     }
 

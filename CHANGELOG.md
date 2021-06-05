@@ -1,3 +1,7 @@
+## [1.0.0-null-safety.1]
+
+* Fix late error
+
 ## [1.0.0-null-safety.0]
 
 * Migrate to null safety
